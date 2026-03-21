@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB = "your-dockerhub-username"
+        DOCKER_HUB = "navesing2112"
         IMAGE_NAME = "train-app"
     }
 
@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/YOUR-USERNAME/cicd-pipeline-train-schedule-autodeploy.git'
+                git 'https://github.com/nks2112/Abstergo_cicd.git'
             }
         }
 
@@ -22,7 +22,7 @@ pipeline {
 
         stage('Push Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'navesing2112', passwordVariable: 'PASS')]) {
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
                     sh 'docker push $DOCKER_HUB/$IMAGE_NAME:$BUILD_NUMBER'
                 }
