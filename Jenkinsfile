@@ -31,6 +31,13 @@ pipeline {
             }
         }
 
+        // ✅ NEW STAGE ADDED HERE
+        stage('Test Kubernetes') {
+            steps {
+                bat 'kubectl get nodes'
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
                 bat '''
