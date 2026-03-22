@@ -39,9 +39,9 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // ✅ Use a proper replacement approach that modifies only the `image:` value
+                // Replace placeholder in deployment.yaml correctly
                 bat """
-                powershell -Command "(Get-Content k8s/deployment.yaml) | ForEach-Object { \$_ -replace 'IMAGE', '%DOCKER_HUB%/%IMAGE_NAME%:%BUILD_NUMBER%' } | Set-Content k8s/deployment.yaml"
+                powershell -Command "(Get-Content k8s/deployment.yaml) | ForEach-Object { \$_ -replace 'image: IMAGE', 'image: %DOCKER_HUB%/%IMAGE_NAME%:%BUILD_NUMBER%' } | Set-Content k8s/deployment.yaml"
                 kubectl apply -f k8s/deployment.yaml
                 kubectl apply -f k8s/service.yaml
                 """
