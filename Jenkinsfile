@@ -31,7 +31,6 @@ pipeline {
             }
         }
 
-        // ✅ NEW STAGE ADDED HERE
         stage('Test Kubernetes') {
             steps {
                 bat 'kubectl get nodes'
@@ -40,11 +39,12 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                bat '''
-                powershell -Command "(Get-Content k8s/deployment.yaml) -replace 'IMAGE','%DOCKER_HUB%/%IMAGE_NAME%:%BUILD_NUMBER%' | Set-Content k8s/deployment.yaml"
+                // ✅ Use a proper replacement approach that modifies only the `image:` value
+                bat """
+                powershell -Command "(Get-Content k8s/deployment.yaml) | ForEach-Object { \$_ -replace 'IMAGE', '%DOCKER_HUB%/%IMAGE_NAME%:%BUILD_NUMBER%' } | Set-Content k8s/deployment.yaml"
                 kubectl apply -f k8s/deployment.yaml
                 kubectl apply -f k8s/service.yaml
-                '''
+                """
             }
         }
     }
